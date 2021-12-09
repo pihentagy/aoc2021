@@ -14,16 +14,13 @@ Stream<List<T>> sliding<T>(Stream<T> stream, int size) async* {
   }
 }
 
-Stream<List<int>> filtered(Stream<int> numbers, int size) =>
-    sliding(numbers, size).where((List<int> nums) => nums[0] < nums[size - 1]);
-
 Future<List<int>> day1(String filename) async {
-  Stream<String> lines = streamFromFilename(filename);
+  Stream<int> numbers = fileLinesStream(filename).map(int.parse);
 
-  final numbers =
-      StreamSplitter.splitFrom(lines.map((line) => int.parse(line)));
+  final numSplit = StreamSplitter.splitFrom(numbers);
 
-  final res1 = await filtered(numbers[0], 2).length;
-  final res2 = await filtered(numbers[1], 4).length;
-  return [res1, res2];
+  return await Future.wait([
+    sliding(numSplit[0], 2).where((List<int> nums) => nums[0] < nums[1]).length,
+    sliding(numSplit[1], 4).where((List<int> nums) => nums[0] < nums[3]).length
+  ]);
 }
