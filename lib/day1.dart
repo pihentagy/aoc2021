@@ -5,7 +5,7 @@ import 'package:async/async.dart';
 
 import 'aoc2021.dart';
 
-Stream<List<T>> sliding<T>(Stream<T> stream, int size) async* {
+Stream<List<T>> sliding<T>(final Stream<T> stream, final int size) async* {
   final memory = ListQueue<T>(size);
   await for (var elem in stream) {
     if (memory.length >= size) memory.removeFirst();
